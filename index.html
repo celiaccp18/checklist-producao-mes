@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+
+<meta charset="UTF-8">
+<title>Checklist Produção MES</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+margin:40px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+button{
+
+padding:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+
+}
+
+.primary{
+
+background:#2563eb;
+color:white;
+
+}
+
+.secondary{
+
+background:#d1d5db;
+
+}
+
+.success{
+
+background:#16a34a;
+color:white;
+
+}
+
+input{
+
+padding:6px;
+width:100%;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #cbd5e1;
+
+}
+
+.grid{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+
+}
+
+.grid3{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+
+}
+
+.workflow{
+
+display:flex;
+gap:40px;
+font-weight:bold;
+
+}
+
+.active{
+
+color:#2563eb;
+
+}
+
+.riscoBaixo{
+
+color:green;
+
+}
+
+.riscoMedio{
+
+color:orange;
+
+}
+
+.riscoAlto{
+
+color:red;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Checklist Operacional Produção</h1>
+
+<div class="card">
+
+<div class="grid">
+
+<div>
+Nº OF
+<input id="of">
+</div>
+
+<div>
+Referência
+<input id="ref">
+</div>
+
+<div>
+Operador
+<input id="operador">
+</div>
+
+<div>
+Data
+<input type="date" id="data">
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+Compliance:
+<span id="compliance">0%</span>
+
+<br><br>
+
+Risco:
+<span id="risco">Elevado</span>
+
+<br><br>
+
+Estado ERP:
+<span id="erp">Não registado</span>
+
+<br><br>
+
+Última validação:
+<span id="time">—</span>
+
+</div>
+
+<div class="card workflow">
+
+<div id="step2" class="active">
+Fase 2 — Preparação
+</div>
+
+<div id="step3">
+Fase 3 — Fabrico
+</div>
+
+</div>
+
+<button onclick="fase2()" class="secondary">
+Ir Fase 2 — Preparação
+</button>
+
+<button onclick="fase3()" class="secondary">
+Ir Fase 3 — Fabrico
+</button>
+
+<div id="fase2" class="grid3">
+
+<div class="card">
+
+<h3>Verificação OF</h3>
+
+<label><input type="checkbox" onchange="check()">OF sistema</label><br>
+
+<label><input type="checkbox" onchange="check()">Versão atual</label><br>
+
+<label><input type="checkbox" onchange="check()">Referência correta</label><br>
+
+<label><input type="checkbox" onchange="check()">Gama acessível</label><br>
+
+<label><input type="checkbox" onchange="check()">Desenhos disponíveis</label>
+
+</div>
+
+<div class="card">
+
+<h3>Preparação</h3>
+
+<label><input type="checkbox" onchange="check()">MP disponível</label><br>
+
+<label><input type="checkbox" onchange="check()">Posto disponível</label><br>
+
+<label><input type="checkbox" onchange="check()">Operadores</label><br>
+
+<label><input type="checkbox" onchange="check()">Sequência</label><br>
+
+<label><input type="checkbox" onchange="check()">Ferramentas</label>
+
+</div>
+
+<div class="card">
+
+<h3>Registos críticos</h3>
+
+<label><input type="checkbox" onchange="check()">Setup ERP</label><br>
+
+<label><input type="checkbox" onchange="check()">Problemas comunicados</label><br>
+
+<label><input type="checkbox" onchange="check()">Produção autorizada</label>
+
+<br><br>
+
+<button onclick="validar()" class="success">
+
+Validar Fase
+
+</button>
+
+</div>
+
+</div>
+
+<div id="fase3" style="display:none" class="grid3">
+
+<div class="card">
+
+<h3>Início</h3>
+
+<label><input type="checkbox" onchange="check()">OF consultada</label><br>
+
+<label><input type="checkbox" onchange="check()">Hora registada</label><br>
+
+<label><input type="checkbox" onchange="check()">Material verificado</label><br>
+
+<label><input type="checkbox" onchange="check()">Equipamento OK</label>
+
+</div>
+
+<div class="card">
+
+<h3>Execução</h3>
+
+<label><input type="checkbox" onchange="check()">Quantidade registada</label><br>
+
+<label><input type="checkbox" onchange="check()">Tempo registado</label><br>
+
+<label><input type="checkbox" onchange="check()">Anomalias</label>
+
+</div>
+
+<div class="card">
+
+<h3>Fecho</h3>
+
+<label><input type="checkbox" onchange="check()">OF fechada</label><br>
+
+<label><input type="checkbox" onchange="check()">Quantidade final</label><br>
+
+<label><input type="checkbox" onchange="check()">Entregue CQ</label>
+
+<br><br>
+
+<button onclick="validar()" class="primary">
+
+Fechar OF
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function fase2(){
+
+document.getElementById("fase2").style.display="grid";
+document.getElementById("fase3").style.display="none";
+
+}
+
+function fase3(){
+
+document.getElementById("fase3").style.display="grid";
+document.getElementById("fase2").style.display="none";
+
+}
+
+function check(){
+
+let total=document.querySelectorAll("input[type=checkbox]").length;
+
+let feitos=document.querySelectorAll("input[type=checkbox]:checked").length;
+
+let percent=Math.round(feitos/total*100);
+
+document.getElementById("compliance").innerHTML=percent+"%";
+
+if(percent>85){
+
+document.getElementById("risco").innerHTML="Baixo";
+
+}
+
+else if(percent>60){
+
+document.getElementById("risco").innerHTML="Moderado";
+
+}
+
+else{
+
+document.getElementById("risco").innerHTML="Elevado";
+
+}
+
+}
+
+function validar(){
+
+let of=document.getElementById("of").value;
+
+let ref=document.getElementById("ref").value;
+
+let operador=document.getElementById("operador").value;
+
+let data=document.getElementById("data").value;
+
+if(of=="" || ref=="" || operador=="" || data==""){
+
+alert("Preencher dados OF");
+
+return;
+
+}
+
+document.getElementById("erp").innerHTML="Registado";
+
+document.getElementById("time").innerHTML=new Date().toLocaleString();
+
+alert("Fase validada");
+
+}
+
+</script>
+
+</body>
+
+</html>
